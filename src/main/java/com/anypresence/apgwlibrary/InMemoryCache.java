@@ -3,7 +3,7 @@ package com.anypresence.apgwlibrary;
 
 import android.util.LruCache;
 
-public class InMemoryCache extends LruCache<String, String> {
+class InMemoryCache extends LruCache<String, String> {
     private static final int DEFAULT_CACHE_SIZE = (int) (Runtime.getRuntime().maxMemory() / 1024) / 8;
 
     /**
