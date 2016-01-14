@@ -21,11 +21,11 @@ public class RequestCacheManager {
         return requestCacheManager;
     }
 
-    public String getFromCache(String key) {
-        return cache.get(key);
+    public String getFromCache(String urlRequest) {
+        return cache.get(urlRequest);
     }
 
-    public void putIntoCache(String key, String value) {
-        cache.put(key, value);
+    public void putIntoCache(String urlRequest, String value) {
+        cache.put(urlRequest, value);
     }
 }
