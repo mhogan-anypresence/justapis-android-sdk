@@ -1,4 +1,4 @@
-package com.anypresence.apgwlibrary;
+package com.anypresence.gw;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
