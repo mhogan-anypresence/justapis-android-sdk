@@ -58,6 +58,9 @@ public class APAndroidRestClient implements IRestClient {
             case "PUT":
                 requestMethod = Request.Method.PUT;
                 break;
+            case "DELETE":
+                requestMethod = Request.Method.DELETE;
+                break;
             default:
                 requestMethod = Request.Method.GET;
         }

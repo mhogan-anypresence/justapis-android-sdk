@@ -7,12 +7,15 @@ import com.anypresence.gw.cache.ICacheManager;
 import java.io.UnsupportedEncodingException;
 
 public class APAndroidCacheManager implements ICacheManager {
+
     @Override
     public void putIntoCache(String requestMethod, String url, String result) {
         Cache.Entry entry = new Cache.Entry();
         try {
             entry.data = result.getBytes("UTF-8");
+
             APAndroidGateway.getRequestQueue().getCache().put(url, entry);
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
