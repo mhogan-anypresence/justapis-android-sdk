@@ -21,8 +21,9 @@ compile 'com.google.guava:guava:18.0'
 AP's JustAPI Java core library:
 APGW-<version>-SNAPSHOT>.jar
 
-==========
+
 Introduction
+==========
 
 The main class to work with is APAndroidGateway. You will use an instance of this class to make requests.
 
@@ -38,8 +39,9 @@ and cache.
         APAndroidGateway gw = builder.build(getActivity().getApplication());
 ```
 
-===========
+
 Setup
+===========
 
 This is a setup instruction for an Android Studio project. Unzip the archive and place APGW-<version>-SNAPSHOT>.jar and gw-<version>.aar in the libs folder of your application.
 
@@ -69,11 +71,13 @@ Enable internet access in your AndroidManfiest.xml
 
 <uses-permission android:name="android.permission.INTERNET"/>
 
-===========
-Examples
 
+Examples
 ===========
+
+
 Basic Usage
+===========
 
 Sends a POST synchronously
 ```{java}
@@ -127,11 +131,13 @@ Use certificate pinning
         gw.post("/bar");
 ```
 
-===========
-Customizations
 
+Customizations
 ===========
+
+
 Caching
+===========
 
 You can add your own caching scheme and not use Volley's mechanism by implementing ICacheManager and setting it on APAndroidGateway.
 
