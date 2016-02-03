@@ -30,7 +30,7 @@ import com.anypresence.gw.*;
 import com.anypresence.gw.exceptions.RequestException;
 
 
-public final class APAndroidGatewayTest {
+public final class APAndroidGatewayTest extends ActivityInstrumentationTestCase2<EmptyActivity> {
 
     private static ClientAndProxy proxy;
     private ClientAndServer mockServer;
@@ -60,7 +60,7 @@ public final class APAndroidGatewayTest {
         APAndroidGateway.Builder builder = new APAndroidGateway.Builder();
         builder.url("http://localhost");
 
-        APAndroidGateway gw = builder.build();
+        APAndroidGateway gw = builder.build(
         Assert.assertEquals("http://localhost", gw.getUrl());
     }
 

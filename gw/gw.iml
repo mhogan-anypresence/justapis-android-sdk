@@ -73,6 +73,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/multidex/1.0.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jacoco" />
@@ -91,12 +92,54 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 23 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="guava-19.0" level="project" />
-    <orderEntry type="library" exported="" name="gson-2.5" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="jzlib-1.1.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="bcprov-jdk15on-1.52" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="netty-common-4.0.31.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="bcpkix-jdk15on-1.52" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="netty-transport-4.0.31.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="json-schema-validator-2.2.6" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="jopt-simple-4.6" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="netty-handler-4.0.31.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="uri-template-0.9" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="mockserver-logging-3.10.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="jsr305-3.0.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="commons-io-1.3.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="json-schema-core-1.2.5" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="bcmail-jdk15on-1.52" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="logback-classic-1.1.3" level="project" />
     <orderEntry type="library" exported="" name="commons-lang3-3.4" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="jackson-annotations-2.5.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="mockito-all-1.10.19" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="netty-codec-4.0.31.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="mockserver-client-java-3.10.2" level="project" />
     <orderEntry type="library" exported="" name="support-v4-23.1.0" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-23.1.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.1.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="jackson-core-2.5.3" level="project" />
+    <orderEntry type="library" exported="" name="guava-19.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="janino-2.5.10" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="rhino-1.7R4" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.5" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="mailapi-1.4.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="logback-core-1.1.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="mockserver-netty-3.10.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="jackson-coreutils-1.8" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="libphonenumber-6.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="jackson-databind-2.5.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="mockserver-core-3.10.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="activation-1.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="joda-time-2.3" level="project" />
+    <orderEntry type="library" exported="" name="multidex-1.0.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="netty-buffer-4.0.31.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="hamcrest-core-1.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="msg-simple-1.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="netty-codec-socks-4.0.31.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="netty-codec-http-4.0.31.Final" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="javax.servlet-api-3.0.1" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="jsonassert-1.2.3" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="btf-1.2" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="slf4j-api-1.7.12" level="project" />
     <orderEntry type="module" module-name="volley" exported="" />
     <orderEntry type="module" module-name="justapis-java-sdk" exported="" />
   </component>

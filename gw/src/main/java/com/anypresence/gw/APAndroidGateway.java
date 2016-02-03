@@ -2,6 +2,7 @@ package com.anypresence.gw;
 
 import android.content.Context;
 
+import com.anypresence.gw.cache.ICacheManager;
 import com.anypresence.gw.exceptions.RequestException;
 import com.anypresence.gw.http.DefaultRestClient;
 
@@ -12,6 +13,9 @@ public class APAndroidGateway {
 
     /** Volley request queue */
     private static com.android.volley.RequestQueue mRequestQueue;
+
+    /** Cache manager */
+    private static ICacheManager mCacheManager;
 
     private APAndroidGateway(Context context, APGateway gateway) {
         mAPGateway = gateway;
@@ -30,12 +34,28 @@ public class APAndroidGateway {
         mRequestQueue = requestQueue;
     }
 
+    public static void setCacheManager(ICacheManager cacheManager) {
+        mCacheManager = cacheManager;
+    }
+
+    public static ICacheManager getCacheManager() {
+        if (mCacheManager == null) {
+            mCacheManager = new APAndroidCacheManager();
+        }
+        return mCacheManager;
+    }
+
     public static void stopRequestQueue() {
         mRequestQueue.stop();
     }
 
     public static void startRequestQueue() {
         mRequestQueue.start();
+    }
+
+    public APAndroidGateway useCaching(boolean shouldUseCaching) {
+        mAPGateway.useCaching(shouldUseCaching);
+        return this;
     }
 
     /**
@@ -81,6 +101,7 @@ public class APAndroidGateway {
         }
         requestContext.setHeaders(headers);
         requestContext.setPostParam(postParam);
+        requestContext.setGateway(this.mAPGateway);
 
         mAPGateway.getRestClient().executeRequest(requestContext);
     }
