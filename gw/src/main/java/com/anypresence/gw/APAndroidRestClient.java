@@ -46,6 +46,7 @@ public class APAndroidRestClient implements IRestClient {
         if (APAndroidGateway.getRequestQueue() == null) {
             APAndroidGateway.setRequestQueue(new RequestQueue(mCache, network));
             APAndroidGateway.getRequestQueue().start();
+            APAndroidGateway.getRequestQueue();
         }
 
         // Formulate the request and handle the response.
@@ -70,6 +71,10 @@ public class APAndroidRestClient implements IRestClient {
             APAndroidStringRequest stringRequest = new APAndroidStringRequest(requestMethod, requestContext.getUrl(), requestContext.getHeaders(), requestContext.getPostParam(), future,
                     future
             );
+
+            if (requestContext.getGateway() != null && requestContext.getGateway().getUseCaching()) {
+                stringRequest.setShouldCache(true);
+            }
             // Add the request to the request queue
             APAndroidGateway.getRequestQueue().add(stringRequest);
             try {
@@ -91,6 +96,11 @@ public class APAndroidRestClient implements IRestClient {
                         }
                     }
             );
+
+            if (requestContext.getGateway() != null && requestContext.getGateway().getUseCaching()) {
+                stringRequest.setShouldCache(true);
+            }
+
             // Add the request to the request queue
             APAndroidGateway.getRequestQueue().add(stringRequest);
         }
