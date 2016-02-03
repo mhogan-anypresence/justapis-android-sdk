@@ -7,9 +7,15 @@ public abstract class APAndroidStringCallback extends APAndroidCallback<String> 
         requestContext.setGateway(gateway);
         requestContext.setCallback(this);
 
+        mMethod = method;
+        mUrl = url;
+
         return requestContext;
     }
 
-
-
+    @Override
+    public void onResponse(String response) {
+        APAndroidGateway.getCacheManager().putIntoCache(mMethod.toString(), mUrl, response);
+        super.onResponse(response);
+    }
 }

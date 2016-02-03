@@ -14,7 +14,9 @@ public class APAndroidCacheManager implements ICacheManager {
         try {
             entry.data = result.getBytes("UTF-8");
 
-            APAndroidGateway.getRequestQueue().getCache().put(url, entry);
+            if (APAndroidGateway.getRequestQueue().getCache() != null) {
+                APAndroidGateway.getRequestQueue().getCache().put(createKey(requestMethod, url), entry);
+            }
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -23,7 +25,7 @@ public class APAndroidCacheManager implements ICacheManager {
 
     @Override
     public String getFromCache(String requestMethod, String url) {
-        Cache.Entry entry = APAndroidGateway.getRequestQueue().getCache().get(url);
+        Cache.Entry entry = APAndroidGateway.getRequestQueue().getCache().get(createKey(requestMethod, url));
 
 
         if (entry != null) {
@@ -38,5 +40,9 @@ public class APAndroidCacheManager implements ICacheManager {
         }
 
         return "";
+    }
+
+    public String createKey(String requestMethod, String url) {
+        return requestMethod.toUpperCase() + "+" + url;
     }
 }
