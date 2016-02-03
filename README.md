@@ -19,7 +19,7 @@ Guava:
 compile 'com.google.guava:guava:18.0'
 
 AP's JustAPI Java core library:
-APGW-<version>-SNAPSHOT>.jar
+APGW-[version]-SNAPSHOT.jar
 
 
 Introduction
@@ -39,11 +39,13 @@ and cache.
         APAndroidGateway gw = builder.build(getActivity().getApplication());
 ```
 
+Caching is done using Volley's disk based cache.
+
 
 Setup
 ===========
 
-This is a setup instruction for an Android Studio project. Unzip the archive and place APGW-<version>-SNAPSHOT>.jar and gw-<version>.aar in the libs folder of your application.
+This is a setup instruction for an Android Studio project. Unzip the archive and place APGW-[version]-SNAPSHOT>.jar and gw-[version].aar in the libs folder of your application.
 
 Modify your gradle.build with:
 
@@ -105,6 +107,30 @@ Sends a request asynchronously
         APAndroidGateway gw = builder.build(getActivity().getApplication());
 
         gw.get("/api/v1/foo", new APAndroidStringCallback() {
+
+          @Override
+          public void finished(String result, Throwable ex) {
+              if (ex == null) {
+                  System.out.println("Got results: " + result);
+              } else {
+                  ex.printStackTrace();
+              }
+          }
+
+         });
+
+```
+
+Enable caching of the request
+
+```{java}
+        APAndroidGateway.Builder builder = new APAndroidGateway.Builder();
+        builder.url("http://localhost:3000");
+
+        APAndroidGateway gw = builder.build(getActivity().getApplication());
+
+        // Enable caching
+        gw.useCaching(true).get("/api/v1/foo", new APAndroidStringCallback() {
 
           @Override
           public void finished(String result, Throwable ex) {
