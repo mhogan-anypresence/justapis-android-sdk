@@ -41,7 +41,7 @@ public class APOkHttpRestClient implements IRestClient {
             response = client.newCall(req).execute();
             String result = response.body().string();
 
-            lastResponse = new ResponseFromRequest(200, result);
+            lastResponse = new ResponseFromRequest(response.code(), result);
         } catch (IOException e) {
             e.printStackTrace();
             lastResponse = new ResponseFromRequest(response.code(), "");

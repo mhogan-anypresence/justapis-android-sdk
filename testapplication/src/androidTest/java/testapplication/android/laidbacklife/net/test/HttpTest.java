@@ -19,6 +19,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import dagger.Provides;
 
@@ -44,7 +45,7 @@ public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
     }
 
 
-    public void test_Mockserver() throws IOException {
+    public void test_Mockserver() throws IOException, InterruptedException {
         OkHttpClient client = new OkHttpClient();
 
         Base.getMockWebServer().enqueue(new MockResponse()
@@ -58,9 +59,33 @@ public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
         if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
 
         Assert.assertEquals("Foobar", response.body().string());
+
+        Base.getMockWebServer().takeRequest();
     }
 
-    public void test_GetFromGateway() throws IOException {
+//    // Gets
+
+    public void test_GetWithVariousCodes() throws IOException, InterruptedException {
+        Base.getMockWebServer().enqueue(new MockResponse()
+                .setBody("foo").setResponseCode(201));
+
+        APAndroidGateway gw = new APAndroidGateway.Builder().url("http://127.0.0.1:9999/api/foo").build(this.getActivity());
+
+        gw.get();
+        Assert.assertEquals(201, gw.readResponse().statusCode);
+
+        Base.getMockWebServer().takeRequest();
+
+        Base.getMockWebServer().enqueue(new MockResponse()
+                .setBody("foo").setResponseCode(400));
+
+        gw.get();
+        Assert.assertEquals(400, gw.readResponse().statusCode);
+
+        Base.getMockWebServer().takeRequest();
+    }
+
+    public void test_GetFromGateway() throws IOException, InterruptedException {
         Base.getMockWebServer().enqueue(new MockResponse()
                 .setBody("foo").setResponseCode(200));
 
@@ -69,7 +94,41 @@ public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
         gw.get();
         String resp = gw.readResponse().data;
 
+        Assert.assertEquals(200, gw.readResponse().statusCode);
         Assert.assertEquals("foo", resp);
+
+        Assert.assertEquals("/api/foo", Base.getMockWebServer().takeRequest(2, TimeUnit.SECONDS).getPath());
+    }
+
+    public void test_Get_UpdateRelativePath() throws IOException, InterruptedException {
+        Base.getMockWebServer().enqueue(new MockResponse()
+                .setBody("foo").setResponseCode(200));
+
+        APAndroidGateway gw = new APAndroidGateway.Builder().url("http://127.0.0.1:9999/api/foo").build(this.getActivity());
+
+        gw.get("bar");
+        String resp = gw.readResponse().data;
+
+        Assert.assertEquals(200, gw.readResponse().statusCode);
+        Assert.assertEquals("foo", resp);
+
+        Assert.assertEquals("/api/foo/bar", Base.getMockWebServer().takeRequest(2, TimeUnit.SECONDS).getPath());
+    }
+
+    // Posts
+
+    public void test_PostFromGateway() throws IOException, InterruptedException {
+        Base.getMockWebServer().enqueue(new MockResponse()
+                .setBody("foo").setResponseCode(200));
+
+        APAndroidGateway gw = new APAndroidGateway.Builder().url("http://127.0.0.1:9999/api/foo").build(this.getActivity());
+
+        gw.post();
+        String resp = gw.readResponse().data;
+        Assert.assertEquals(200, gw.readResponse().statusCode);
+
+        Assert.assertEquals("foo", resp);
+        Assert.assertEquals("/api/foo", Base.getMockWebServer().takeRequest().getPath());
     }
 
 
