@@ -5,8 +5,11 @@ import android.content.Context;
 import com.anypresence.gw.cache.ICacheManager;
 import com.anypresence.gw.exceptions.RequestException;
 import com.anypresence.gw.http.DefaultRestClient;
+import com.anypresence.gw.http.IRestClient;
 
 import java.util.Map;
+
+import javax.inject.Inject;
 
 public class APAndroidGateway {
     private APGateway mAPGateway;
@@ -19,7 +22,7 @@ public class APAndroidGateway {
 
     private APAndroidGateway(Context context, APGateway gateway) {
         mAPGateway = gateway;
-        mAPGateway.setRestClient(new APAndroidRestClient(context));
+        mAPGateway.setRestClient(new APOkHttpRestClient());
     }
 
     public static CertPinningManager getCertPinningManager() {

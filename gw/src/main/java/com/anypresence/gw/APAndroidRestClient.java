@@ -16,6 +16,7 @@ import com.android.volley.toolbox.RequestFuture;
 import com.anypresence.gw.exceptions.RequestException;
 import com.anypresence.gw.http.*;
 import com.android.volley.*;
+import com.squareup.okhttp.OkHttpClient;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutionException;
@@ -26,6 +27,8 @@ import java.util.concurrent.TimeoutException;
 public class APAndroidRestClient implements IRestClient {
     private WeakReference<Context> mContext;
     private Cache mCache;
+
+
 
     private ResponseFromRequest lastResponse;
 
