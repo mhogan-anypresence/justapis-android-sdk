@@ -35,7 +35,6 @@ abstract public class APAndroidCallback<T> extends com.anypresence.gw.APCallback
             finished(null, e);
         }
 
-
     }
 
 }
