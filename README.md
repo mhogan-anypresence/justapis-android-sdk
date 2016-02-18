@@ -12,11 +12,11 @@ These dependencies needed are:
 GSON:
 compile 'com.google.code.gson:gson:2.5'
 
-Apache commons lang:
-compile 'org.apache.commons:commons-lang3:3.4'
-
 Guava:
 compile 'com.google.guava:guava:18.0'
+
+OKHttp:
+compile 'com.squareup.okhttp:okhttp:2.7.4'
 
 AP's JustAPI Java core library:
 APGW-[version]-SNAPSHOT.jar
@@ -39,7 +39,7 @@ and cache.
         APAndroidGateway gw = builder.build(getActivity().getApplication());
 ```
 
-Caching is done using Volley's disk based cache.
+Response caching is supported and the cache files are written to disk when enabled.
 
 
 Setup
@@ -53,9 +53,9 @@ Modify your gradle.build with:
 dependencies {
 
     compile(name:'gw-debug', ext:'aar')
-    compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.google.guava:guava:18.0'
     compile 'com.google.code.gson:gson:2.5'
+    compile 'com.squareup.okhttp:okhttp:2.7.4'
 
 }
 
@@ -117,9 +117,31 @@ Sends a request asynchronously
               }
           }
 
-         });
+        });
 
 ```
+
+
+
+Certificate Pinning
+===========
+
+Certificate pinning allows you to tie certificates against specified domains. It defends against attacks on certificate authorities.
+It has it's limitations as well. We require the base64 encoded hashed SubjectPublicKeyInfo. See the example below for google.com
+
+Example:
+```{java}
+        APAndroidGateway.getCertPinningManager().add("google.com", "sha1/qANMQh2fy6tyyjS9qEjosxOLe1w=");
+        APAndroidGateway gw = new APAndroidGateway.Builder().url("https://google.com").build(this.getActivity());
+
+        gw.setUseCertPinning(true);
+
+        APGateway gw = builder.build(getActivity().getApplication());
+        gw.post("/bar");
+```
+
+Caching
+===========
 
 Enable caching of the request
 
@@ -141,49 +163,9 @@ Enable caching of the request
               }
           }
 
-         });
+        });
 
 ```
 
-Use certificate pinning
-```{java}
-        APAndroidGateway.getInstance().setupCa("myalias", certificateInBytes);
+The next request to the same url endpoint will not hit the network.
 
-        APAndroidGateway.Builder builder = new APAndroidGateway.Builder();
-        builder.url("https://localhost:3000");
-        builder.useCertPinning(true);
-
-        APGateway gw = builder.build(getActivity().getApplication());
-        gw.post("/bar");
-```
-
-
-Customizations
-===========
-
-
-Caching
-===========
-
-You can add your own caching scheme and not use Volley's mechanism by implementing ICacheManager and setting it on APAndroidGateway.
-
-```{java}
-
-public class MyCacheManager implements ICacheManager {
-
-    @Override
-    public void putIntoCache(String requestMethod, String url, String result) {
-        //
-    }
-
-    @Override
-    public String getFromCache(String requestMethod, String url) {
-        //
-    }
-
-
-}
-
-APAndroidGateway.setCacheManager(new MyCacheManager());
-
-```
