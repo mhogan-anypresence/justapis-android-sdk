@@ -22,7 +22,8 @@ public class APAndroidGateway {
 
     private APAndroidGateway(Context context, APGateway gateway) {
         mAPGateway = gateway;
-        mAPGateway.setRestClient(new APOkHttpRestClient());
+        mAPGateway.setRestClient(new APOkHttpRestClient(context));
+        mAPGateway.useCaching(false);
     }
 
     public static CertPinningManager getCertPinningManager() {
@@ -61,6 +62,10 @@ public class APAndroidGateway {
         return this;
     }
 
+    public IRestClient getRestClient() {
+        return mAPGateway.getRestClient();
+    }
+
     /**
      * Executes the request
      */
@@ -96,6 +101,7 @@ public class APAndroidGateway {
                 : method;
 
         RequestContext<?> requestContext;
+
         if (callback != null) {
             requestContext = callback.createRequestContext(resolvedMethod, Utilities.updateUrl(mAPGateway.getUrl(), url), this);
         } else {

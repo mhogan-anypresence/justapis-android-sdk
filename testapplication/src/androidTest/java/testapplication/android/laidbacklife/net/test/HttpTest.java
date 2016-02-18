@@ -3,6 +3,7 @@ package testapplication.android.laidbacklife.net.test;
 import android.test.ActivityInstrumentationTestCase2;
 
 import com.anypresence.gw.APAndroidGateway;
+import com.anypresence.gw.APOkHttpRestClient;
 import com.anypresence.gw.TransformedResponse;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -63,7 +64,7 @@ public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
         Base.getMockWebServer().takeRequest();
     }
 
-//    // Gets
+    // Gets
 
     public void test_GetWithVariousCodes() throws IOException, InterruptedException {
         Base.getMockWebServer().enqueue(new MockResponse()
@@ -129,6 +130,37 @@ public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
         Assert.assertEquals("foo", resp);
         Assert.assertEquals("/api/foo", Base.getMockWebServer().takeRequest().getPath());
+    }
+
+
+    // Caching
+
+    public void test_Cache() throws InterruptedException {
+        Base.getMockWebServer().enqueue(new MockResponse()
+                .addHeader("Cache-Control: max-age=60")
+                .setBody("foo").setResponseCode(200));
+
+        APAndroidGateway gw = new APAndroidGateway.Builder().url("http://127.0.0.1:9999/api/foo").build(this.getActivity());
+
+        gw.useCaching(true).get();
+
+        String resp = gw.readResponse().data;
+        Assert.assertEquals(200, gw.readResponse().statusCode);
+
+        Base.getMockWebServer().takeRequest();
+
+        Assert.assertTrue(((APOkHttpRestClient) gw.getRestClient()).getCache().getRequestCount() == 1);
+        Assert.assertTrue(((APOkHttpRestClient) gw.getRestClient()).getCache().getNetworkCount() == 1);
+        Assert.assertTrue(((APOkHttpRestClient) gw.getRestClient()).getCache().getHitCount() == 0);
+
+        // Test the cache
+        gw.useCaching(true).get();
+        resp = gw.readResponse().data;
+        Assert.assertEquals(200, gw.readResponse().statusCode);
+
+        Assert.assertTrue(((APOkHttpRestClient) gw.getRestClient()).getCache().getRequestCount() == 2);
+        Assert.assertTrue(((APOkHttpRestClient) gw.getRestClient()).getCache().getNetworkCount() == 1);
+        Assert.assertTrue(((APOkHttpRestClient) gw.getRestClient()).getCache().getHitCount() == 1);
     }
 
 

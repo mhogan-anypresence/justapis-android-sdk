@@ -1,8 +1,15 @@
 package com.anypresence.gw;
 
+import android.content.Context;
+import android.net.http.HttpResponseCache;
+
 import com.anypresence.gw.exceptions.RequestException;
 import com.anypresence.gw.http.IRestClient;
+import com.squareup.okhttp.Cache;
+import com.squareup.okhttp.CacheControl;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.OkHttpClient.*;
+
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
@@ -15,12 +22,26 @@ import javax.inject.Inject;
  *
  */
 public class APOkHttpRestClient implements IRestClient {
-    private OkHttpClient client = new OkHttpClient();
+    private OkHttpClient client;
 
     private ResponseFromRequest lastResponse;
 
+
     @Inject
     public APOkHttpRestClient() {
+        client = new OkHttpClient();
+    }
+
+    public APOkHttpRestClient(Context context) {
+        // Setup caching
+        int cacheSize = 1024 * 1024;
+        Cache cache = new Cache(context.getCacheDir(), cacheSize);
+        client = new OkHttpClient();
+        client.setCache(cache);
+    }
+
+    public Cache getCache() {
+        return client.getCache();
     }
 
     @Override
@@ -31,13 +52,19 @@ public class APOkHttpRestClient implements IRestClient {
     @Override
     public void executeRequest(RequestContext<?> request) throws RequestException {
         String url = request.getUrl();
-        Request.Builder builder = new Request.Builder()
-                .url(url);
+        CacheControl cacheControl;
+        Request.Builder builder = new Request.Builder().url(url);
+
+        if (!request.getGateway().getUseCaching()) {
+            cacheControl = new CacheControl.Builder().noStore().build();
+            builder = builder.cacheControl(cacheControl);
+        }
 
         Request req = builder.build();
 
         Response response = null;
         try {
+
             response = client.newCall(req).execute();
             String result = response.body().string();
 
