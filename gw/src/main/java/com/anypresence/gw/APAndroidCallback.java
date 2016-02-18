@@ -1,6 +1,7 @@
 package com.anypresence.gw;
 
 
+import com.anypresence.gw.exceptions.RequestException;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -23,8 +24,13 @@ abstract public class APAndroidCallback<T> extends com.anypresence.gw.APCallback
     public void onResponse(Response response) {
         T parsedResponse;
         try {
-            parsedResponse = transformResponse(response);
-            finished(parsedResponse, null);
+            if (response.isSuccessful()) {
+                parsedResponse = transformResponse(response);
+                finished(parsedResponse, null);
+            } else {
+                finished(null, new RequestException(response.message(), response.code()));
+            }
+
         } catch (IOException e) {
             finished(null, e);
         }

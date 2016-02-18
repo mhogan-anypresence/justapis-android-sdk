@@ -32,7 +32,7 @@ public class APAndroidGateway {
     public void setUseCertPinning(boolean useCertPinning) {
         mAPGateway.setUseCertPinning(useCertPinning);
 
-        getCertPinningManager().addAllCertsToClient(((APOkHttpRestClient)getRestClient()).getOkHttpClient());
+        getCertPinningManager().addAllCertsToClient(((APOkHttpRestClient) getRestClient()).getOkHttpClient());
     }
 
     /**
@@ -109,10 +109,23 @@ public class APAndroidGateway {
         }
     }
 
+    /**
+     * Sends post request
+     *
+     * @param callback
+     * @param <T>
+     */
     public <T> void post(APAndroidCallback<T> callback) {
         post(mAPGateway.getUrl(), callback);
     }
 
+    /**
+     * Sends post request
+     *
+     * @param url
+     * @param callback
+     * @param <T>
+     */
     public <T> void post(String url, APAndroidCallback<T> callback) {
         try {
             execute(url, HTTPMethod.POST, callback);
@@ -146,10 +159,23 @@ public class APAndroidGateway {
         }
     }
 
+    /**
+     * Sends a get request
+     *
+     * @param callback
+     * @param <T>
+     */
     public <T> void get(APAndroidCallback<T> callback) {
         get(mAPGateway.getUrl(), callback);
     }
 
+    /**
+     * Sends a get request
+     *
+     * @param url
+     * @param callback
+     * @param <T>
+     */
     public <T> void get(String url, APAndroidCallback<T> callback) {
         try {
             execute(url, HTTPMethod.GET, callback);

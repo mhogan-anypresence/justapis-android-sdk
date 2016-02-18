@@ -35,14 +35,12 @@ dependencies {
     androidTestCompile 'org.mockito:mockito-all:1.10.19'
     androidTestCompile 'org.mock-server:mockserver-netty:3.10.2'
 
-//    compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
     compile 'com.android.support:appcompat-v7:23.1.0'
-    //compile project(':libraries:justapis-java-sdk')
-    //compile 'com.squareup.okhttp3:okhttp:3.1.2'
+
     compile 'com.squareup.okhttp:okhttp:2.7.4'
     compile 'com.squareup.dagger:dagger:1.2.2'
     compile 'com.squareup.dagger:dagger-compiler:1.2.2'
-    compile project(':volley')
+//    compile project(':volley')
     compile project(':justapis-java-sdk')
     compile 'org.json:json:20090211'
 
