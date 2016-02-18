@@ -7,7 +7,7 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 
-abstract public class APOkHttpCallback<T> extends com.anypresence.gw.APCallback<T> implements Callback {
+abstract public class APAndroidCallback<T> extends com.anypresence.gw.APCallback<T> implements Callback {
     public RequestContext<T> createRequestContext(HTTPMethod method, String url, APAndroidGateway gateway) {
         return null;
     }

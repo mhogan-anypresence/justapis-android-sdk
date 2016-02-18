@@ -1,16 +1,12 @@
 package com.anypresence.gw;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.net.http.HttpResponseCache;
 
 import com.anypresence.gw.exceptions.RequestException;
 import com.anypresence.gw.http.IRestClient;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.CacheControl;
-import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.OkHttpClient.*;
 
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -69,7 +65,7 @@ public class APOkHttpRestClient implements IRestClient {
 
         Request req = builder.build();
 
-        final APOkHttpStringCallback callback = (APOkHttpStringCallback) ((APAndroidStringRequestContext) request).getCallback();
+        final APAndroidStringCallback callback = (APAndroidStringCallback) ((APAndroidStringRequestContext) request).getCallback();
 
         Response response = null;
         if (callback == null) {

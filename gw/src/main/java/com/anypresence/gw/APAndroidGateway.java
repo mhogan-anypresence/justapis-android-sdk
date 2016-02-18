@@ -50,11 +50,11 @@ public class APAndroidGateway {
         execute(mAPGateway.getUrl(), method, null, null, null);
     }
 
-    public <T> void execute(final String url, APOkHttpCallback<T> callback) throws RequestException {
+    public <T> void execute(final String url, APAndroidCallback<T> callback) throws RequestException {
         execute(url, null, null, null, callback);
     }
 
-    private <T> void execute(final String url, final HTTPMethod method, APOkHttpCallback<T> callback) throws RequestException {
+    private <T> void execute(final String url, final HTTPMethod method, APAndroidCallback<T> callback) throws RequestException {
         execute(url, method, null, null, callback);
     }
 
@@ -65,7 +65,7 @@ public class APAndroidGateway {
      *            relative url to connect to
      */
     private <T> void execute(final String url, final HTTPMethod method, Map<String,String> postParam, Map<String,String> headers,
-                             APOkHttpCallback<T> callback) throws RequestException {
+                             APAndroidCallback<T> callback) throws RequestException {
         final HTTPMethod resolvedMethod = (method == null) ? mAPGateway.getMethod()
                 : method;
 
@@ -109,11 +109,11 @@ public class APAndroidGateway {
         }
     }
 
-    public <T> void post(APOkHttpCallback<T> callback) {
+    public <T> void post(APAndroidCallback<T> callback) {
         post(mAPGateway.getUrl(), callback);
     }
 
-    public <T> void post(String url, APOkHttpCallback<T> callback) {
+    public <T> void post(String url, APAndroidCallback<T> callback) {
         try {
             execute(url, HTTPMethod.POST, callback);
         } catch (RequestException e) {
@@ -146,11 +146,11 @@ public class APAndroidGateway {
         }
     }
 
-    public <T> void get(APOkHttpCallback<T> callback) {
+    public <T> void get(APAndroidCallback<T> callback) {
         get(mAPGateway.getUrl(), callback);
     }
 
-    public <T> void get(String url, APOkHttpCallback<T> callback) {
+    public <T> void get(String url, APAndroidCallback<T> callback) {
         try {
             execute(url, HTTPMethod.GET, callback);
         } catch (RequestException e) {

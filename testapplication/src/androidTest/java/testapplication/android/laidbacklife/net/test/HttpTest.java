@@ -4,27 +4,21 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import com.anypresence.gw.APAndroidGateway;
 import com.anypresence.gw.APOkHttpRestClient;
-import com.anypresence.gw.TransformedResponse;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
 
 import junit.framework.Assert;
 
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import dagger.Provides;
-import com.anypresence.gw.APOkHttpStringCallback;
+import com.anypresence.gw.APAndroidStringCallback;
 
 public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -125,7 +119,7 @@ public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
         APAndroidGateway gw = new APAndroidGateway.Builder().url("http://127.0.0.1:9999/api/foo").build(this.getActivity());
         final CountDownLatch endSignal = new CountDownLatch(1);
 
-        gw.get(new APOkHttpStringCallback() {
+        gw.get(new APAndroidStringCallback() {
 
             @Override
             public void finished(String object, Throwable ex) {
