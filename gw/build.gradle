@@ -36,8 +36,11 @@ dependencies {
     androidTestCompile 'org.mock-server:mockserver-netty:3.10.2'
 
     compile 'com.android.support:appcompat-v7:23.1.0'
-    //compile project(':libraries:justapis-java-sdk')
-    compile project(':volley')
+
+    compile 'com.squareup.okhttp:okhttp:2.7.4'
+    compile 'com.squareup.dagger:dagger:1.2.2'
+    compile 'com.squareup.dagger:dagger-compiler:1.2.2'
+//    compile project(':volley')
     compile project(':justapis-java-sdk')
     compile 'org.json:json:20090211'
 

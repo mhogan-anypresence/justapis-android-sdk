@@ -2,60 +2,37 @@ package com.anypresence.gw;
 
 import android.content.Context;
 
-import com.anypresence.gw.cache.ICacheManager;
 import com.anypresence.gw.exceptions.RequestException;
-import com.anypresence.gw.http.DefaultRestClient;
+import com.anypresence.gw.http.IRestClient;
 
 import java.util.Map;
 
 public class APAndroidGateway {
     private APGateway mAPGateway;
 
-    /** Volley request queue */
-    private static com.android.volley.RequestQueue mRequestQueue;
-
-    /** Cache manager */
-    private static ICacheManager mCacheManager;
-
     private APAndroidGateway(Context context, APGateway gateway) {
         mAPGateway = gateway;
-        mAPGateway.setRestClient(new APAndroidRestClient(context));
+        mAPGateway.setRestClient(new APOkHttpRestClient(context));
+        mAPGateway.useCaching(false);
     }
 
-    public static CertPinningManager getCertPinningManager() {
-        return CertPinningManager.getInstance();
-    }
-
-    public static com.android.volley.RequestQueue getRequestQueue() {
-        return mRequestQueue;
-    }
-
-    public static void setRequestQueue(com.android.volley.RequestQueue requestQueue) {
-        mRequestQueue = requestQueue;
-    }
-
-    public static void setCacheManager(ICacheManager cacheManager) {
-        mCacheManager = cacheManager;
-    }
-
-    public static ICacheManager getCacheManager() {
-        if (mCacheManager == null) {
-            mCacheManager = new APAndroidCacheManager();
-        }
-        return mCacheManager;
-    }
-
-    public static void stopRequestQueue() {
-        mRequestQueue.stop();
-    }
-
-    public static void startRequestQueue() {
-        mRequestQueue.start();
+    public static APAndroidCertPinningManager getCertPinningManager() {
+        return APAndroidCertPinningManager.getInstance();
     }
 
     public APAndroidGateway useCaching(boolean shouldUseCaching) {
         mAPGateway.useCaching(shouldUseCaching);
         return this;
+    }
+
+    public IRestClient getRestClient() {
+        return mAPGateway.getRestClient();
+    }
+
+    public void setUseCertPinning(boolean useCertPinning) {
+        mAPGateway.setUseCertPinning(useCertPinning);
+
+        getCertPinningManager().addAllCertsToClient(((APOkHttpRestClient) getRestClient()).getOkHttpClient());
     }
 
     /**
@@ -66,7 +43,11 @@ public class APAndroidGateway {
     }
 
     public void execute(String url) throws RequestException {
-        execute(url, null);
+        execute(url, null, null, null, null);
+    }
+
+    public void execute(String url, final HTTPMethod method) throws RequestException {
+        execute(url, method, null, null, null);
     }
 
     public void execute(HTTPMethod method) throws RequestException {
@@ -77,8 +58,12 @@ public class APAndroidGateway {
         execute(url, null, null, null, callback);
     }
 
-    private <T> void execute(final String url, final HTTPMethod method, APAndroidCallback<T> callback) throws RequestException {
+    public <T> void execute(final String url, final HTTPMethod method, APAndroidCallback<T> callback) throws RequestException {
         execute(url, method, null, null, callback);
+    }
+
+    public <T> void execute(final String url, final HTTPMethod method, Map<String,String> headers, APAndroidCallback<T> callback) throws RequestException {
+        execute(url, method, null, headers, callback);
     }
 
     /**
@@ -93,6 +78,7 @@ public class APAndroidGateway {
                 : method;
 
         RequestContext<?> requestContext;
+
         if (callback != null) {
             requestContext = callback.createRequestContext(resolvedMethod, Utilities.updateUrl(mAPGateway.getUrl(), url), this);
         } else {
@@ -105,6 +91,7 @@ public class APAndroidGateway {
 
         mAPGateway.getRestClient().executeRequest(requestContext);
     }
+
 
     /**
      * @see APGateway#post(String)
@@ -123,18 +110,31 @@ public class APAndroidGateway {
      * @param url
      *            relative url to connect to
      */
-    public void post(String url, String body) {
+    public void post(String url, Map<String,String> body) {
         try {
-            execute(url, HTTPMethod.POST, null);
+            execute(url, HTTPMethod.POST, body, null, null);
         } catch (RequestException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Sends post request
+     *
+     * @param callback
+     * @param <T>
+     */
     public <T> void post(APAndroidCallback<T> callback) {
         post(mAPGateway.getUrl(), callback);
     }
 
+    /**
+     * Sends post request
+     *
+     * @param url
+     * @param callback
+     * @param <T>
+     */
     public <T> void post(String url, APAndroidCallback<T> callback) {
         try {
             execute(url, HTTPMethod.POST, callback);
@@ -168,10 +168,23 @@ public class APAndroidGateway {
         }
     }
 
+    /**
+     * Sends a get request
+     *
+     * @param callback
+     * @param <T>
+     */
     public <T> void get(APAndroidCallback<T> callback) {
         get(mAPGateway.getUrl(), callback);
     }
 
+    /**
+     * Sends a get request
+     *
+     * @param url
+     * @param callback
+     * @param <T>
+     */
     public <T> void get(String url, APAndroidCallback<T> callback) {
         try {
             execute(url, HTTPMethod.GET, callback);

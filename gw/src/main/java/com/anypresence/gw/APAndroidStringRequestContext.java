@@ -5,8 +5,6 @@ class APAndroidStringRequestContext extends StringRequestContext {
 
     APAndroidGateway mGateway;
 
-    private APAndroidStringCallback callback;
-
     public APAndroidStringRequestContext(HTTPMethod requestMethod, String url) {
         super(requestMethod, url);
     }
@@ -15,12 +13,4 @@ class APAndroidStringRequestContext extends StringRequestContext {
         this.mGateway = mGateway;
     }
 
-    /** callback to handle the response */
-    public APAndroidStringCallback getCallback() {
-        return callback;
-    }
-
-    public void setCallback(APAndroidStringCallback callback) {
-        this.callback = callback;
-    }
 }

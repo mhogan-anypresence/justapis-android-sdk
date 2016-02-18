@@ -1,0 +1,46 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "test.android.laidbacklife.net.testapplication"
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+        //testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        testFunctionalTest true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    androidTestCompile 'junit:junit:4.12'
+
+//    androidTestCompile 'org.mockito:mockito-all:1.10.19'
+//    androidTestCompile('org.mock-server:mockserver-netty:3.10.2')
+
+    androidTestCompile 'com.squareup.okhttp:mockwebserver:2.7.4'
+    androidTestCompile 'com.squareup.dagger:dagger:1.2.2'
+    androidTestCompile 'com.squareup.dagger:dagger-compiler:1.2.2'
+    androidTestCompile 'org.mockito:mockito-core:1.10.19'
+    androidTestCompile 'com.google.dexmaker:dexmaker:1.2'
+    androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.2'
+
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    //compile 'com.google.guava:guava:19.0'
+    compile project(':gw')
+    compile project(':justapis-java-sdk')
+    compile project(':volley')
+
+}

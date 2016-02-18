@@ -1,21 +1,22 @@
 package com.anypresence.gw;
 
-public abstract class APAndroidStringCallback extends APAndroidCallback<String> {
+
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
+
+public abstract class APAndroidStringCallback extends APAndroidCallback<String> implements IAPFutureCallback<String> {
 
     public RequestContext<String> createRequestContext(HTTPMethod method, String url, APAndroidGateway gateway) {
         APAndroidStringRequestContext requestContext = new APAndroidStringRequestContext(method, url);
         requestContext.setGateway(gateway);
         requestContext.setCallback(this);
 
-        mMethod = method;
-        mUrl = url;
-
         return requestContext;
     }
 
-    @Override
-    public void onResponse(String response) {
-        APAndroidGateway.getCacheManager().putIntoCache(mMethod.toString(), mUrl, response);
-        super.onResponse(response);
+    public String transformResponse(Response response) throws IOException {
+        return response.body().string();
     }
+
 }
