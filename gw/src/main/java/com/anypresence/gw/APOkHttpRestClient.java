@@ -1,12 +1,14 @@
 package com.anypresence.gw;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.http.HttpResponseCache;
 
 import com.anypresence.gw.exceptions.RequestException;
 import com.anypresence.gw.http.IRestClient;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.CacheControl;
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.OkHttpClient.*;
 
@@ -40,6 +42,10 @@ public class APOkHttpRestClient implements IRestClient {
         client.setCache(cache);
     }
 
+    public OkHttpClient getOkHttpClient() {
+        return client;
+    }
+
     public Cache getCache() {
         return client.getCache();
     }
@@ -56,23 +62,31 @@ public class APOkHttpRestClient implements IRestClient {
         Request.Builder builder = new Request.Builder().url(url);
 
         if (!request.getGateway().getUseCaching()) {
+            // Do not use caching
             cacheControl = new CacheControl.Builder().noStore().build();
             builder = builder.cacheControl(cacheControl);
         }
 
         Request req = builder.build();
 
+        final APOkHttpStringCallback callback = (APOkHttpStringCallback) ((APAndroidStringRequestContext) request).getCallback();
+
         Response response = null;
-        try {
+        if (callback == null) {
+            try {
+                response = client.newCall(req).execute();
 
-            response = client.newCall(req).execute();
-            String result = response.body().string();
+                String result = response.body().string();
 
-            lastResponse = new ResponseFromRequest(response.code(), result);
-        } catch (IOException e) {
-            e.printStackTrace();
-            lastResponse = new ResponseFromRequest(response.code(), "");
+                lastResponse = new ResponseFromRequest(response.code(), result);
+            } catch (IOException e) {
+                e.printStackTrace();
+                lastResponse = new ResponseFromRequest(response.code(), "");
+            }
+        } else {
+            client.newCall(req).enqueue(callback);
         }
+
     }
 }
 

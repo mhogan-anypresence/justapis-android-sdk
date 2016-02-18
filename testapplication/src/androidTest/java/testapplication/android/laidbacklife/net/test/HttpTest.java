@@ -20,9 +20,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import dagger.Provides;
+import com.anypresence.gw.APOkHttpStringCallback;
 
 public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -116,6 +118,27 @@ public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
         Assert.assertEquals("/api/foo/bar", Base.getMockWebServer().takeRequest(2, TimeUnit.SECONDS).getPath());
     }
 
+    public void test_GetAsync() throws IOException, InterruptedException {
+        Base.getMockWebServer().enqueue(new MockResponse()
+                .setBody("async time").setResponseCode(200));
+
+        APAndroidGateway gw = new APAndroidGateway.Builder().url("http://127.0.0.1:9999/api/foo").build(this.getActivity());
+        final CountDownLatch endSignal = new CountDownLatch(1);
+
+        gw.get(new APOkHttpStringCallback() {
+
+            @Override
+            public void finished(String object, Throwable ex) {
+                Assert.assertNull(ex);
+                Assert.assertEquals("async time", object);
+                endSignal.countDown();
+            }
+        });
+        endSignal.await();
+
+        Assert.assertEquals("/api/foo", Base.getMockWebServer().takeRequest(2, TimeUnit.SECONDS).getPath());
+    }
+
     // Posts
 
     public void test_PostFromGateway() throws IOException, InterruptedException {
@@ -161,6 +184,7 @@ public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
         Assert.assertTrue(((APOkHttpRestClient) gw.getRestClient()).getCache().getRequestCount() == 2);
         Assert.assertTrue(((APOkHttpRestClient) gw.getRestClient()).getCache().getNetworkCount() == 1);
         Assert.assertTrue(((APOkHttpRestClient) gw.getRestClient()).getCache().getHitCount() == 1);
+
     }
 
 
