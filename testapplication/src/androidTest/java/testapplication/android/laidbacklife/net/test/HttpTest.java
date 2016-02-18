@@ -1,9 +1,12 @@
 package testapplication.android.laidbacklife.net.test;
 
 import android.test.ActivityInstrumentationTestCase2;
+import android.util.Base64;
 
 import com.anypresence.gw.APAndroidGateway;
 import com.anypresence.gw.APOkHttpRestClient;
+import com.anypresence.gw.HTTPMethod;
+import com.anypresence.gw.exceptions.RequestException;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -15,10 +18,15 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import com.anypresence.gw.APAndroidStringCallback;
+import com.squareup.okhttp.mockwebserver.RecordedRequest;
+
+import okio.Buffer;
 
 public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
@@ -148,6 +156,40 @@ public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
         Assert.assertEquals("foo", resp);
         Assert.assertEquals("/api/foo", Base.getMockWebServer().takeRequest().getPath());
     }
+
+    public void test_PostWithBody() throws IOException, InterruptedException {
+        Base.getMockWebServer().enqueue(new MockResponse()
+                .setBody("foo").setResponseCode(200));
+
+        APAndroidGateway gw = new APAndroidGateway.Builder().url("http://127.0.0.1:9999/api/foo").build(this.getActivity());
+
+        Map<String,String> body = new HashMap<>();
+        body.put("foo", "bar");
+        gw.post("", body);
+        String resp = gw.readResponse().data;
+        Assert.assertEquals(200, gw.readResponse().statusCode);
+
+        Assert.assertEquals("foo", resp);
+        RecordedRequest recordedRequest = Base.getMockWebServer().takeRequest();
+
+        Assert.assertEquals("/api/foo/", recordedRequest.getPath());
+        Assert.assertEquals("POST", recordedRequest.getMethod().toUpperCase());
+    }
+
+    public void test_Delete() throws IOException, InterruptedException, RequestException {
+        Base.getMockWebServer().enqueue(new MockResponse()
+                .setBody("foo").setResponseCode(200));
+
+        APAndroidGateway gw = new APAndroidGateway.Builder().url("http://127.0.0.1:9999/api/foo").build(this.getActivity());
+        gw.execute("bar", HTTPMethod.DELETE);
+
+        RecordedRequest recordedRequest = Base.getMockWebServer().takeRequest();
+
+        Assert.assertEquals("/api/foo/bar", recordedRequest.getPath());
+        Assert.assertEquals("DELETE", recordedRequest.getMethod().toUpperCase());
+    }
+
+
 
 
     // Caching

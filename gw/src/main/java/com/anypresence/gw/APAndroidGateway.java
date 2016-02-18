@@ -43,7 +43,11 @@ public class APAndroidGateway {
     }
 
     public void execute(String url) throws RequestException {
-        execute(url, null);
+        execute(url, null, null, null, null);
+    }
+
+    public void execute(String url, final HTTPMethod method) throws RequestException {
+        execute(url, method, null, null, null);
     }
 
     public void execute(HTTPMethod method) throws RequestException {
@@ -54,8 +58,12 @@ public class APAndroidGateway {
         execute(url, null, null, null, callback);
     }
 
-    private <T> void execute(final String url, final HTTPMethod method, APAndroidCallback<T> callback) throws RequestException {
+    public <T> void execute(final String url, final HTTPMethod method, APAndroidCallback<T> callback) throws RequestException {
         execute(url, method, null, null, callback);
+    }
+
+    public <T> void execute(final String url, final HTTPMethod method, Map<String,String> headers, APAndroidCallback<T> callback) throws RequestException {
+        execute(url, method, null, headers, callback);
     }
 
     /**
@@ -84,6 +92,7 @@ public class APAndroidGateway {
         mAPGateway.getRestClient().executeRequest(requestContext);
     }
 
+
     /**
      * @see APGateway#post(String)
      */
@@ -101,9 +110,9 @@ public class APAndroidGateway {
      * @param url
      *            relative url to connect to
      */
-    public void post(String url, String body) {
+    public void post(String url, Map<String,String> body) {
         try {
-            execute(url, HTTPMethod.POST, null);
+            execute(url, HTTPMethod.POST, body, null, null);
         } catch (RequestException e) {
             e.printStackTrace();
         }

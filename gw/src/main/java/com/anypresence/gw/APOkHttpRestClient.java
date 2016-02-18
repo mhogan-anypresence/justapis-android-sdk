@@ -6,12 +6,17 @@ import com.anypresence.gw.exceptions.RequestException;
 import com.anypresence.gw.http.IRestClient;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.CacheControl;
+import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -24,6 +29,8 @@ public class APOkHttpRestClient implements IRestClient {
 
     private ResponseFromRequest lastResponse;
 
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
 
     @Inject
     public APOkHttpRestClient() {
@@ -56,6 +63,35 @@ public class APOkHttpRestClient implements IRestClient {
         String url = request.getUrl();
         CacheControl cacheControl;
         Request.Builder builder = new Request.Builder().url(url);
+
+        Map<String,String> headers = request.getHeaders();
+        if (headers != null) {
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                builder.addHeader(entry.getKey(), entry.getValue());
+            }
+        }
+
+        RequestBody body = null;
+        if (request.getPostParam() != null) {
+            body = RequestBody.create(JSON, new JSONObject(request.getPostParam()).toString());
+        } else {
+            body = RequestBody.create(JSON, "");
+        }
+
+        switch(request.getMethod()) {
+            case POST:
+                builder.post(body);
+                break;
+            case PUT:
+                builder.put(body);
+                break;
+            case DELETE:
+                builder.delete(body);
+                break;
+            default:
+                builder.get();
+                break;
+        }
 
         if (!request.getGateway().getUseCaching()) {
             // Do not use caching
