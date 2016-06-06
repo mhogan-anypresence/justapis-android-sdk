@@ -5,6 +5,7 @@ import android.content.Context;
 import com.anypresence.gw.exceptions.RequestException;
 import com.anypresence.gw.http.IRestClient;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class APAndroidGateway {
@@ -72,7 +73,7 @@ public class APAndroidGateway {
      * @param url
      *            relative url to connect to
      */
-    private <T> void execute(final String url, final HTTPMethod method, Map<String,String> postParam, Map<String,String> headers,
+    private <T> void execute(final String url, final HTTPMethod method, Map<String,Object> postParam, Map<String,String> headers,
                              APAndroidCallback<T> callback) throws RequestException {
         final HTTPMethod resolvedMethod = (method == null) ? mAPGateway.getMethod()
                 : method;
@@ -110,7 +111,7 @@ public class APAndroidGateway {
      * @param url
      *            relative url to connect to
      */
-    public void post(String url, Map<String,String> body) {
+    public void post(String url, Map<String,Object> body) {
         try {
             execute(url, HTTPMethod.POST, body, null, null);
         } catch (RequestException e) {
@@ -191,6 +192,18 @@ public class APAndroidGateway {
         } catch (RequestException e) {
             e.printStackTrace();
         }
+    }
+
+    public <T> void subscribe(String codeName, String name, String platform, String channel, String period, String token, APCallback<String> callback) {
+        mAPGateway.subscribe(codeName, name, platform, channel, period, token, callback);
+    }
+
+    public <T> void unsubscribe(String codeName, String name, String token, APCallback<String> callback) {
+        mAPGateway.unsubscribe(codeName, name, token, callback);
+    }
+
+    public <T> void publish(String codeName, String channel, String environment, Map<String,Object> payload, APCallback<String> callback) {
+        mAPGateway.publish(codeName, channel, environment, payload, callback);
     }
 
     public ResponseFromRequest readResponse() {
