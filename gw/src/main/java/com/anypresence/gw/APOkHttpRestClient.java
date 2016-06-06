@@ -13,9 +13,11 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -73,7 +75,20 @@ public class APOkHttpRestClient implements IRestClient {
 
         RequestBody body = null;
         if (request.getPostParam() != null) {
-            body = RequestBody.create(JSON, new JSONObject(request.getPostParam()).toString());
+            JSONObject jsonObject = new JSONObject(request.getPostParam());
+            for (Map.Entry<String, Object> entry : request.getPostParam().entrySet()) {
+                if (entry.getValue() instanceof HashMap) {
+                    try {
+                        JSONArray array = new JSONArray();
+                        HashMap<String, Object> innerMap = (HashMap<String, Object>)entry.getValue();
+                        array.put(innerMap);
+                        jsonObject.put(entry.getKey(), array);
+                    } catch(org.json.JSONException ex) {
+                        //
+                    }
+                }
+            }
+            body = RequestBody.create(JSON, jsonObject.toString());
         } else {
             body = RequestBody.create(JSON, "");
         }
