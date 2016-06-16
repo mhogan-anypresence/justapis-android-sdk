@@ -194,7 +194,7 @@ public class APAndroidGateway {
         }
     }
 
-    public <T> void subscribe(String codeName, String name, String platform, String channel, String period, String token, APCallback<String> callback) {
+    public <T> void subscribe(String codeName, String name, String platform, String channel, long period, String token, APCallback<String> callback) {
         mAPGateway.subscribe(codeName, name, platform, channel, period, token, callback);
     }
 
