@@ -163,8 +163,9 @@ public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
 
         APAndroidGateway gw = new APAndroidGateway.Builder().url("http://127.0.0.1:9999/api/foo").build(this.getActivity());
 
-        Map<String,String> body = new HashMap<>();
+        Map<String,Object> body = new HashMap<>();
         body.put("foo", "bar");
+
         gw.post("", body);
         String resp = gw.readResponse().data;
         Assert.assertEquals(200, gw.readResponse().statusCode);
@@ -220,7 +221,6 @@ public class HttpTest extends ActivityInstrumentationTestCase2<MainActivity> {
         Assert.assertTrue(((APOkHttpRestClient) gw.getRestClient()).getCache().getRequestCount() == 2);
         Assert.assertTrue(((APOkHttpRestClient) gw.getRestClient()).getCache().getNetworkCount() == 1);
         Assert.assertTrue(((APOkHttpRestClient) gw.getRestClient()).getCache().getHitCount() == 1);
-
     }
 
 
