@@ -60,7 +60,7 @@ public final class APAndroidGatewayTest extends ActivityInstrumentationTestCase2
         APAndroidGateway.Builder builder = new APAndroidGateway.Builder();
         builder.url("http://localhost");
 
-        APAndroidGateway gw = builder.build(
+        APAndroidGateway gw = builder.build();
         Assert.assertEquals("http://localhost", gw.getUrl());
     }
 
