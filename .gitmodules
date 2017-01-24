@@ -1,0 +1,3 @@
+[submodule "justapis-java-sdk"]
+	path = justapis-java-sdk
+	url = git@github.com:nanoscaleio/justapis-java-sdk.git
